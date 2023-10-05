@@ -3,32 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
-use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\JsonResponse;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    /*public function create()
+    public function register(RegisterRequest $request): JsonResponse
     {
-        return view('register.create');
-    }*/
-
-    public function register(RegisterRequest $request): \Illuminate\Http\JsonResponse
-    {
-
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:7',
+        $user = User::query()->create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-        
-        return response()->json(['message' => 'Congratulations! Registration is successful.'], 201);
+
+        return api(
+            UserResource::make($user),
+            201
+        );
     }
 }
