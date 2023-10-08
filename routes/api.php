@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
@@ -16,4 +17,13 @@ Route::middleware('auth:sanctum')
             ->group(function () {
                 Route::get('/me','me');
             });
+        Route::controller(NoteController::class)
+            ->prefix('notes')
+            ->group(function () {
+                Route::post('/create', 'create');
+                Route::get('/{note:id}', 'show');
+                Route::put('/{note:id}', 'update');
+                Route::delete('/{note:id}', 'destroy');
+            });
 });
+
