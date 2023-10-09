@@ -18,11 +18,13 @@ Route::middleware('auth:sanctum')
                 Route::get('/me','me');
             });
         Route::controller(NoteController::class)
-            ->prefix('notes')
+            ->prefix('note')
             ->group(function () {
                 Route::post('/create', 'create');
+
                 Route::get('/{note:id}', 'show');
                 Route::put('/{note:id}', 'update');
+
                 Route::delete('/{note:id}', 'destroy');
             });
 });

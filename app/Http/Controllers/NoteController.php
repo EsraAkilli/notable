@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\NoteRequests\DestroyNoteRequest;
-use App\Http\Requests\NoteRequests\CreateNoteRequest;
-use App\Http\Requests\NoteRequests\ShowNoteRequest;
-use App\Http\Requests\NoteRequests\UpdateNoteRequest;
+use App\Http\Requests\Note\DestroyNoteRequest;
+use App\Http\Requests\Note\CreateNoteRequest;
+use App\Http\Requests\Note\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
 use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
@@ -31,7 +31,10 @@ class NoteController extends Controller
         $note = Note::query()->create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
+            'user_id' => auth()->id(),
         ]);
+
+        // Repocity
 
         return api(
             NoteResource::make($note),
@@ -39,7 +42,7 @@ class NoteController extends Controller
         );
     }
 
-    public function show(ShowNoteRequest $request, Note $note): JsonResponse
+    public function show(Note $note): JsonResponse
     {
         return api(
             NoteResource::make($note)
