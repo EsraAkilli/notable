@@ -7,6 +7,7 @@ use App\Http\Requests\Note\CreateNoteRequest;
 use App\Http\Requests\Note\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
 use App\Models\Note;
+use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,16 +29,19 @@ class NoteController extends Controller
 
     public function create(CreateNoteRequest $request): JsonResponse
     {
+        $service = NoteService::make()
+            ->setTitle($request->input('title'));
+
+        $service->create();
+
         $note = Note::query()->create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'user_id' => auth()->id(),
         ]);
 
-        // Repocity
-
         return api(
-            NoteResource::make($note),
+            $service->resource(),
             201
         );
     }
