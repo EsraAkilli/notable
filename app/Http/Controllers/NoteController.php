@@ -44,7 +44,7 @@ class NoteController extends Controller
 
     public function show(Note $note): JsonResponse
     {
-        $note->load('user');
+        $note->loadMissing('user');
 
         return api(
             NoteResource::make($note)
