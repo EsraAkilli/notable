@@ -28,6 +28,20 @@ class NoteService
         return $this;
     }
 
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function setUser(string $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function create(): Note
     {
         $this->note = Note::query()->create([
@@ -37,6 +51,21 @@ class NoteService
         ]);
 
         return $this->note;
+    }
+
+    public function update(): Note
+    {
+        $this->note->update([
+            'title' => $this->title,
+            'content' => $this->content,
+        ]);
+
+        return $this->note;
+    }
+
+    public function destroy(): bool
+    {
+        return $this->note->delete();
     }
 
     public function resource(): NoteResource

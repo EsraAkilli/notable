@@ -30,15 +30,11 @@ class NoteController extends Controller
     public function create(CreateNoteRequest $request): JsonResponse
     {
         $service = NoteService::make()
-            ->setTitle($request->input('title'));
+            ->setTitle($request->input('title'))
+            ->setContent($request->input('content'))
+            ->setUser($request->input('user'));
 
         $service->create();
-
-        $note = Note::query()->create([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'user_id' => auth()->id(),
-        ]);
 
         return api(
             $service->resource(),
@@ -55,21 +51,24 @@ class NoteController extends Controller
         );
     }
 
-    public function update(UpdateNoteRequest $request, Note $note): JsonResponse
+    public function update(UpdateNoteRequest $request): JsonResponse
     {
-        $note = Note::query()->update([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-        ]);
+        $service = NoteService::make()
+            ->setTitle($request->input('title'))
+            ->setContent($request->input('content'));
+
+        $service->update();
 
         return api(
-            NoteResource::make($note)
+            $service->resource(),
         );
     }
 
-    public function destroy(DestroyNoteRequest $request, Note $note): JsonResponse
+    public function destroy(): JsonResponse
     {
-        $note->delete();
+        $service = NoteService::make();
+
+        $service->destroy();
 
         return api(
             null,
