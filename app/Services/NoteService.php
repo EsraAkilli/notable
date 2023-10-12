@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\NoteResource;
 use App\Models\Note;
+use App\Models\User;
 
 class NoteService
 {
@@ -11,7 +12,7 @@ class NoteService
 
     private string $content;
 
-    private mixed $user;
+    private User $user;
 
     private Note $note;
 
@@ -35,9 +36,16 @@ class NoteService
         return $this;
     }
 
-    public function setUser(string $user): self
+    public function setUser(User|\Illuminate\Contracts\Auth\Authenticatable $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function setNote(Note $note): self
+    {
+        $this->note = $note;
 
         return $this;
     }

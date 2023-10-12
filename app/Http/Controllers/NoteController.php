@@ -32,7 +32,7 @@ class NoteController extends Controller
         $service = NoteService::make()
             ->setTitle($request->input('title'))
             ->setContent($request->input('content'))
-            ->setUser($request->input('user'));
+            ->setUser(auth()->user());
 
         $service->create();
 
@@ -64,15 +64,15 @@ class NoteController extends Controller
         );
     }
 
-    public function destroy(): JsonResponse
+    public function destroy(Note $note): JsonResponse
     {
-        $service = NoteService::make();
+        $service = NoteService::make()
+            ->setNote($note);
 
         $service->destroy();
 
         return api(
-            null,
-            204
+            null
         );
     }
 }
