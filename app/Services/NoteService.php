@@ -55,7 +55,7 @@ class NoteService
         $this->note = Note::query()->create([
             'title' => $this->title,
             'content' => $this->content,
-            'user_id' => $this->user,
+            'user_id' => $this->user->id,
         ]);
 
         return $this->note;

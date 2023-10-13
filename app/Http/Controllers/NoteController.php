@@ -4,22 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Note\DestroyNoteRequest;
 use App\Http\Requests\Note\CreateNoteRequest;
+use App\Http\Requests\Note\ListRequest;
 use App\Http\Requests\Note\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
 use App\Models\Note;
 use App\Services\NoteService;
+use App\Services\NoteListService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function list(ListRequest $request): JsonResponse
     {
         $user = $request->user();
 
-        $notes = $user->notes()
-            ->orderBy('updated_at', 'DESC')
+        $notes = NoteListService::make($user)
+            ->addFilter('title', $request->input('title'))
+            ->addFilter('content', $request->input('content'))
             ->get();
 
         return api(
@@ -32,7 +35,7 @@ class NoteController extends Controller
         $service = NoteService::make()
             ->setTitle($request->input('title'))
             ->setContent($request->input('content'))
-            ->setUser(auth()->user());
+            ->setUser(user());
 
         $service->create();
 

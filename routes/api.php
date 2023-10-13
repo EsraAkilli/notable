@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')
             ->group(function () {
                 Route::post('/create', 'create');
 
+                Route::get('/list', 'list');
+
                 Route::get('/{note:id}', 'show');
                 Route::put('/{note:id}', 'update');
 
