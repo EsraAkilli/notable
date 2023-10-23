@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Note\DestroyNoteRequest;
 use App\Http\Requests\Note\CreateNoteRequest;
 use App\Http\Requests\Note\ListRequest;
 use App\Http\Requests\Note\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
 use App\Models\Note;
-use App\Services\NoteService;
 use App\Services\NoteListService;
+use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
@@ -20,13 +17,12 @@ class NoteController extends Controller
     {
         $user = $request->user();
 
-        $notes = NoteListService::make($user)
+        $service = NoteListService::make($user)
             ->addFilter('title', $request->input('title'))
-            ->addFilter('content', $request->input('content'))
-            ->get();
+            ->addFilter('content', $request->input('content'));
 
         return api(
-            NoteResource::collection($notes)
+            $service->result() // NoteResource::collection($notes)
         );
     }
 

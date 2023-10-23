@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Http\JsonResponse;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 
 class RegisterController extends Controller
 {
@@ -16,7 +16,6 @@ class RegisterController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ]);
-
 
         return api(
             UserResource::make($user),

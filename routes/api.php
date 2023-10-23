@@ -2,9 +2,8 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NoteController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisterController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [RegisterController::class, 'register']);
@@ -15,7 +14,7 @@ Route::middleware('auth:sanctum')
         Route::controller(UserController::class)
             ->prefix('user')
             ->group(function () {
-                Route::get('/me','me');
+                Route::get('/me', 'me');
             });
         Route::controller(NoteController::class)
             ->prefix('note')
@@ -29,5 +28,4 @@ Route::middleware('auth:sanctum')
 
                 Route::delete('/{note:id}', 'destroy');
             });
-});
-
+    });

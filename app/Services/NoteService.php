@@ -16,7 +16,6 @@ class NoteService
 
     private Note $note;
 
-
     public static function make(): self
     {
         return new self();
