@@ -6,8 +6,10 @@ use App\Models\Note;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -30,7 +32,12 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('note', function ($id) {
-            return Note::query()->authorize()->where('id', $id)->firstOrFail();
+
+            $note = Note::query()->where('id', $id)->firstOrFail();
+
+            if ($note->user_id != Auth::user()->id) {
+                throw new UnauthorizedHttpException("You are not allowed for updating someone else's note");
+            }
         });
 
         $this->routes(function () {

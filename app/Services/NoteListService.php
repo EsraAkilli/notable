@@ -54,7 +54,8 @@ class NoteListService
 
         foreach ($this->filters as $filter) {
             $value = $filter['value'];
-            $query->where($filter['column'], 'LIKE', "%$value%"); 
+
+            $query->where($filter['column'], 'LIKE', "%$value%");
         }
 
         return $query;

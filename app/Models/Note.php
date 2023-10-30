@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\User $user
  *
  * @method static Builder|Note authorize(?\App\Models\User $user = null)  // What are these?
+ * @method static \Database\Factories\NoteFactory factory($count = null, $state = [])
  * @method static Builder|Note newModelQuery()
  * @method static Builder|Note newQuery()
  * @method static Builder|Note query()

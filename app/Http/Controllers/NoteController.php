@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 
 class NoteController extends Controller
 {
-    public function list(ListRequest $request): JsonResponse
+    public function list(ListRequest $request)
     {
         $user = $request->user();
 
@@ -21,9 +21,7 @@ class NoteController extends Controller
             ->addFilter('title', $request->input('title'))
             ->addFilter('content', $request->input('content'));
 
-        return api(
-            $service->result() // NoteResource::collection($notes)
-        );
+        return $service->result();
     }
 
     public function create(CreateNoteRequest $request): JsonResponse
@@ -50,17 +48,16 @@ class NoteController extends Controller
         );
     }
 
-    public function update(UpdateNoteRequest $request): JsonResponse
+    public function update(Note $note, UpdateNoteRequest $request): JsonResponse
     {
         $service = NoteService::make()
+            ->setNote($note)
             ->setTitle($request->input('title'))
             ->setContent($request->input('content'));
 
         $service->update();
 
-        return api(
-            $service->resource(),
-        );
+        return api([]);
     }
 
     public function destroy(Note $note): JsonResponse
