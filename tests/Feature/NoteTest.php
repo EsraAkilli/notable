@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class NoteTest extends TestCase
 {
-    public function test_note_create(): void
+    public function test_create(): void
     {
         $user = User::factory()->create();
 
@@ -41,7 +41,7 @@ class NoteTest extends TestCase
         ]);
     }
 
-    public function test_note_create_unauthorize(): void
+    public function test_create_unauthorize(): void
     {
         $title = fake()->title();
         $content = fake()->text();
@@ -55,7 +55,7 @@ class NoteTest extends TestCase
         $this->assertDatabaseEmpty(Note::class);
     }
 
-    public function test_note_create_invalid(): void
+    public function test_create_invalid(): void
     {
         $user = User::factory()->create();
 
@@ -72,7 +72,7 @@ class NoteTest extends TestCase
         ]);
     }
 
-    public function test_note_show(): void
+    public function test_show(): void
     {
         $user = User::factory()->create();
         $note = Note::factory()->for($user)->create();
@@ -98,7 +98,7 @@ class NoteTest extends TestCase
         ]);
     }
 
-    public function test_note_update(): void
+    public function test_update(): void
     {
         $user = User::factory()->create();
         $note = Note::factory()->for($user)->create();
@@ -140,7 +140,7 @@ class NoteTest extends TestCase
         $response->assertUnauthorized();
     }
 
-    public function test_note_destroy(): void
+    public function test_destroy(): void
     {
         $user = User::factory()->create();
         $note = Note::factory()->for($user)->create();
@@ -151,5 +151,37 @@ class NoteTest extends TestCase
 
         $response->assertNotFound();
         // $response->assertNoContent($status = 204);
+    }
+
+    public function test_list(): void
+    {
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        Note::factory(3)->for($user)->create();
+
+        $response = $this->get('api/note/list');
+
+        $response->assertSuccessful();
+
+        $response->assertJsonCount(3);
+    }
+
+    public function test_list_authorize(): void
+    {
+        $user = User::factory()->create();
+        $seconduser= User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        Note::factory(3)->for($user)->create();
+        Note::factory(3)->for($seconduser)->create();
+
+        $response = $this->get('api/note/list');
+
+        $response->assertSuccessful();
+
+        $response->assertJsonCount(3);
     }
 }

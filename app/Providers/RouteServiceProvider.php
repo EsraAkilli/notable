@@ -32,10 +32,9 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('note', function ($id) {
-
             $note = Note::query()->where('id', $id)->firstOrFail();
 
-            if ($note->user_id != Auth::user()->id) {
+            if (auth()->check() && $note->user_id !== Auth::user()->id) {
                 throw new UnauthorizedHttpException("You are not allowed for updating someone else's note");
             }
         });
