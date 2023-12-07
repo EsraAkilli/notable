@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum')
             ->prefix('user')
             ->group(function () {
                 Route::get('/me', 'me');
+                Route::put('/me', 'update');
             });
         Route::controller(NoteController::class)
             ->prefix('note')
