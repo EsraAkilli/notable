@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Note\UpdateNoteRequest;
+use App\Http\Requests\ChangeUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Resources\NoteResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -38,5 +37,17 @@ class UserController extends Controller
         return api(
             UserResource::make(request()->user())
         );
+    }
+
+    public function changeUserPassword(ChangeUserPasswordRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $user->update([
+            'password' =>$request->input('password'),
+        ]);
+
+        return apiSuccess();
     }
 }
