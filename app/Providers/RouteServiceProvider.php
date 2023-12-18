@@ -37,6 +37,8 @@ class RouteServiceProvider extends ServiceProvider
             if (auth()->check() && $note->user_id !== Auth::user()->id) {
                 throw new UnauthorizedHttpException("You are not allowed for updating someone else's note");
             }
+
+            return $note;
         });
 
         $this->routes(function () {
