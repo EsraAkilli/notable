@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\User\Repos\UserRepo;
+use App\Enums\ActivityLogEnum;
 use App\Http\Requests\ChangeUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -47,6 +50,15 @@ class UserController extends Controller
         $user->update([
             'password' =>$request->input('password'),
         ]);
+
+        return apiSuccess();
+    }
+
+    public function logout()
+    {
+        $user = user();
+
+        $user->tokens()->delete();
 
         return apiSuccess();
     }

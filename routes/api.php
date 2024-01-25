@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')
                 Route::get('/me', 'me');
                 Route::put('/me', 'update');
                 Route::put('/password', 'changeUserPassword');
+                Route::post('/logout', 'logout');
             });
         Route::controller(NoteController::class)
             ->prefix('note')
