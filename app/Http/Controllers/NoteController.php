@@ -20,6 +20,7 @@ class NoteController extends Controller
         $service = NoteListService::make($user)
             ->addFilter('title', $request->input('title'))
             ->addFilter('content', $request->input('content'));
+            // ->addTagFilter('tags', $request->input('tags'));
 
         return $service->result();
     }
@@ -32,6 +33,7 @@ class NoteController extends Controller
             ->setUser(user());
 
         $service->create();
+        $service->addTags($request->input('name', []));
 
         return api(
             $service->resource(),

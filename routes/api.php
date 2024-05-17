@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,7 @@ Route::middleware('auth:sanctum')
                 Route::get('/me', 'me');
                 Route::put('/me', 'update');
                 Route::put('/password', 'changeUserPassword');
-                Route::post('/logout', 'logout');
+                Route::get('/logout', 'logout');
             });
         Route::controller(NoteController::class)
             ->prefix('note')

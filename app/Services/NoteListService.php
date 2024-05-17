@@ -48,6 +48,22 @@ class NoteListService
         return $this;
     }
 
+    /* public function addTagFilter(string $name, ?string $value): self
+    {
+        if (empty($value)) {
+            return $this;
+        }
+
+        $this->filters[] = [
+            'relation' => 'tags',
+            'column' => 'tags',
+            'operator' => 'LIKE',
+            'value' => $value,
+        ];
+
+        return $this;
+    } */
+
     protected function getQuery(): Builder
     {
         $query = Note::query()->authorize($this->user);
@@ -57,18 +73,8 @@ class NoteListService
 
             $query->where($filter['column'], 'LIKE', "%$value%");
         }
-
         return $query;
     }
-
-    /* public function get(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-    {
-        $notes = $this->getQuery()
-            ->orderBy('updated_at', 'DESC')
-            ->get();
-
-        return NoteResource::collection($notes);
-    } */
 
     public function result(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {

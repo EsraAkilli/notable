@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\NoteResource;
 use App\Models\Note;
+use App\Models\Tag;
 use App\Models\User;
 
 class NoteService
@@ -45,6 +46,15 @@ class NoteService
     public function setNote(Note $note): self
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function addTags(array $tags): self
+    {
+        foreach ($tags as $tagName) {
+            $tag = $this->note->tags()->firstOrCreate(['name' => $tagName]);
+        }
 
         return $this;
     }
