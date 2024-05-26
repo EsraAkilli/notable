@@ -12,6 +12,8 @@ class UpdateNoteRequest extends FormRequest
             'note' => ['exists:notes,id'],
             'title' => ['required', 'max:255'],
             'content' => ['required'],
+            'tags' => ['array'],
+            'tags.*' => ['string', 'max:255'],
         ];
     }
 }

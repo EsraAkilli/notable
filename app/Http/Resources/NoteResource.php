@@ -20,6 +20,7 @@ class NoteResource extends JsonResource
             'updated_at' => $this->updated_at,
 
             'user' => new UserResource($this->whenLoaded('user')),
+            'tags' => $this->tags?->pluck('name'),
         ];
     }
 }

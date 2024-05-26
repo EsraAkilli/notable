@@ -33,7 +33,7 @@ class NoteController extends Controller
             ->setUser(user());
 
         $service->create();
-        $service->addTags($request->input('name', []));
+        $service->addTags($request->input('tags', []));
 
         return api(
             $service->resource(),
@@ -43,7 +43,7 @@ class NoteController extends Controller
 
     public function show(Note $note): JsonResponse
     {
-        $note->loadMissing('user');
+        $note->loadMissing(['user', 'tags']);
 
         return api(
             NoteResource::make($note)
@@ -56,6 +56,8 @@ class NoteController extends Controller
             ->setNote($note)
             ->setTitle($request->input('title'))
             ->setContent($request->input('content'));
+
+        $service->addTags($request->input('tags', []));
 
         $service->update();
 

@@ -52,9 +52,14 @@ class NoteService
 
     public function addTags(array $tags): self
     {
-        foreach ($tags as $tagName) {
-            $tag = $this->note->tags()->firstOrCreate(['name' => $tagName]);
+        $tagIds = [];
+
+        foreach ($tags as $tag) {
+            $tagModel = Tag::firstOrCreate(['name' => $tag]);
+            $tagIds[] = $tagModel->id;
         }
+
+        $this->note->tags()->sync($tagIds);
 
         return $this;
     }

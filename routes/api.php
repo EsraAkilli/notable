@@ -33,3 +33,5 @@ Route::middleware('auth:sanctum')
                 Route::delete('/{note:id}', 'destroy');
             });
     });
+
+Route::get('/tags', [TagController::class, 'index']);
