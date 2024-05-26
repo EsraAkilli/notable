@@ -9,18 +9,19 @@ use Illuminate\Database\Eloquent\Builder;
 
 class NoteListService
 {
-    private User $user;
+    private User|null $user;
 
     private array $filters = [];
 
-    private int $perPage = 10;
+    private int $perPage = 100;
+    private ?string $searchQuery = null;
 
-    public function __construct(User $user)
+    public function __construct(User $user = null)
     {
         $this->user = $user;
     }
 
-    public static function make(User $user): self
+    public static function make(User $user = null): self
     {
         return new self($user);
     }
@@ -48,32 +49,38 @@ class NoteListService
         return $this;
     }
 
-    /* public function addTagFilter(string $name, ?string $value): self
-    {
-        if (empty($value)) {
-            return $this;
-        }
-
-        $this->filters[] = [
-            'relation' => 'tags',
-            'column' => 'tags',
-            'operator' => 'LIKE',
-            'value' => $value,
-        ];
-
-        return $this;
-    } */
-
     protected function getQuery(): Builder
     {
-        $query = Note::query()->authorize($this->user);
+        $query = Note::query();
+
+        if ($this->user) {
+            $query->authorize($this->user);
+        }
 
         foreach ($this->filters as $filter) {
             $value = $filter['value'];
 
             $query->where($filter['column'], 'LIKE', "%$value%");
         }
+
+        if ($this->searchQuery) {
+            $query->where(function ($query) {
+                $searchString = "%$this->searchQuery%";
+
+               return $query->where('title', 'LIKE', $searchString)
+                   ->orWhere('content', 'LIKE', $searchString)
+                   ->orWhere('tags_for_search', 'LIKE', $searchString);
+            });
+        }
+
         return $query;
+    }
+
+    public function search(?string $query): self
+    {
+        $this->searchQuery = $query;
+
+        return $this;
     }
 
     public function result(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection

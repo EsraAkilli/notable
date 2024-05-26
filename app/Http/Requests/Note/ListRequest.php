@@ -9,8 +9,8 @@ class ListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'max:255'],
-            'content' => ['sometimes', 'max:255'],
+            'query' => ['sometimes', 'max:255'],
+            'is_public' => ['sometimes', 'boolean'],
         ];
     }
 }

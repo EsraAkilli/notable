@@ -30,16 +30,16 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
-
-        Route::bind('note', function ($id) {
-            $note = Note::query()->where('id', $id)->firstOrFail();
-
-            if (auth()->check() && $note->user_id !== Auth::user()->id) {
-                throw new UnauthorizedHttpException("You are not allowed for updating someone else's note");
-            }
-
-            return $note;
-        });
+//
+//        Route::bind('note', function ($id) {
+//            $note = Note::query()->where('id', $id)->firstOrFail();
+//
+//            if (auth()->check() && $note->user_id !== Auth::user()->id) {
+//                throw new UnauthorizedHttpException("You are not allowed for updating someone else's note");
+//            }
+//
+//            return $note;
+//        });
 
         $this->routes(function () {
             Route::middleware('api')

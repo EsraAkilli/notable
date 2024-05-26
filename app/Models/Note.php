@@ -35,6 +35,7 @@ class Note extends Model
         'user_id',
         'title',
         'content',
+        'tags_for_search',
     ];
 
     public function user(): BelongsTo
@@ -52,5 +53,12 @@ class Note extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (self $model) {
+            $model->tags_for_search = implode("||", $model->tags->pluck('name')->toArray());
+        });
     }
 }

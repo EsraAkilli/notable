@@ -17,10 +17,12 @@ class NoteController extends Controller
     {
         $user = $request->user();
 
+        if ($request->boolean('is_public')) {
+            $user = null;
+        }
+
         $service = NoteListService::make($user)
-            ->addFilter('title', $request->input('title'))
-            ->addFilter('content', $request->input('content'));
-            // ->addTagFilter('tags', $request->input('tags'));
+            ->search($request->input('query'));
 
         return $service->result();
     }
