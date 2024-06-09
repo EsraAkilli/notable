@@ -31,6 +31,9 @@ Route::middleware('auth:sanctum')
                 Route::put('/{note:id}', 'update');
 
                 Route::delete('/{note:id}', 'destroy');
+
+                Route::post('/{note:id}/like', 'like');
+                Route::post('/{note:id}/dislike', 'dislike');
             });
     });
 

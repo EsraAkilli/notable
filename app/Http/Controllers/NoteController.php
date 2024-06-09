@@ -10,6 +10,7 @@ use App\Models\Note;
 use App\Services\NoteListService;
 use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class NoteController extends Controller
 {
@@ -76,5 +77,42 @@ class NoteController extends Controller
         return api(
             null
         );
+    }
+
+    public function like(Request $request, Note $note): JsonResponse
+    {
+        $user = $request->user();
+        $likeCount = $note->likes()->count();
+
+        if ($note->likes()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'Already liked', 'likeCount' => $likeCount], 400);
+        }
+
+        $note->dislikes()->where('user_id', $user->id)->first()?->delete();
+
+        $note->likes()->create([
+            'user_id' => $user->id,
+        ]);
+
+
+        return response()->json(['message' => 'Liked', 'likeCount' => $likeCount]);
+    }
+
+    public function dislike(Request $request, Note $note): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($note->dislikes()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'Already disliked'], 400);
+        }
+
+        $note->likes()->where('user_id', $user->id)->first()?->delete();
+
+        $note->dislikes()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $dislikeCount = $note->dislikes()->count();
+        return response()->json(['message' => 'Disliked', 'dislikeCount' => $dislikeCount]);
     }
 }

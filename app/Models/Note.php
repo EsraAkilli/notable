@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Note
@@ -60,5 +61,15 @@ class Note extends Model
         static::saving(function (self $model) {
             $model->tags_for_search = implode("||", $model->tags->pluck('name')->toArray());
         });
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function dislikes(): HasMany
+    {
+        return $this->hasMany(Dislike::class);
     }
 }
