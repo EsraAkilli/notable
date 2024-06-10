@@ -6,6 +6,7 @@ use App\Http\Requests\Note\CreateNoteRequest;
 use App\Http\Requests\Note\ListRequest;
 use App\Http\Requests\Note\UpdateNoteRequest;
 use App\Http\Resources\NoteResource;
+use App\Models\Comment;
 use App\Models\Note;
 use App\Services\NoteListService;
 use App\Services\NoteService;
@@ -114,5 +115,20 @@ class NoteController extends Controller
 
         $dislikeCount = $note->dislikes()->count();
         return response()->json(['message' => 'Disliked', 'dislikeCount' => $dislikeCount]);
+    }
+
+    public function addComment(Request $request, Note $note): JsonResponse
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        $comment = new Comment();
+        $comment->note_id = $note->id;
+        $comment->user_id = $request->user()->id;
+        $comment->content = $request->input('content');
+        $comment->save();
+
+        return response()->json(['message' => 'Comment added successfully', 'comment' => $comment], 201);
     }
 }

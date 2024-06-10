@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\RegisterController;
@@ -34,6 +35,8 @@ Route::middleware('auth:sanctum')
 
                 Route::post('/{note:id}/like', 'like');
                 Route::post('/{note:id}/dislike', 'dislike');
+
+                Route::post('/{note:id}/comment', 'addComment');
             });
     });
 

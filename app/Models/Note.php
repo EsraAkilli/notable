@@ -72,4 +72,9 @@ class Note extends Model
     {
         return $this->hasMany(Dislike::class);
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
