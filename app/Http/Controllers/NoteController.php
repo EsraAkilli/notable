@@ -131,4 +131,11 @@ class NoteController extends Controller
 
         return response()->json(['message' => 'Comment added successfully', 'comment' => $comment], 201);
     }
+
+    public function getComments($id): JsonResponse
+    {
+        $comments = Comment::query()->where('note_id', $id)->with('user')->get();
+
+        return response()->json(['comments' => $comments], 200);
+    }
 }

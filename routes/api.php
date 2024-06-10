@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')
                 Route::post('/{note:id}/dislike', 'dislike');
 
                 Route::post('/{note:id}/comment', 'addComment');
+                Route::get('/{note:id}/get-comments', 'getComments');
             });
     });
 
